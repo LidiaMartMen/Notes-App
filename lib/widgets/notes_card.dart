@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/notes.dart';
+import 'package:notes_app_riverpod/widgets/widgets.dart';
 
 class NotesCard extends StatelessWidget {
   final List<Nota> notas;
@@ -38,14 +39,26 @@ class NotesCard extends StatelessWidget {
                     shrinkWrap: false,
                     itemBuilder: (context, index) {
                       final nota = notas[index];
-                      return Row(
-                        children: [
-                          Notes(
-                            icon: nota.category.icon,
-                            title: nota.title,
-                            date: nota.date,
-                          ),
-                        ],
+
+                      return InkWell(
+
+                        //TODO: deslizar izq para borrar nota:
+                        
+                        onTap: () async {
+                          //Mostrar detalles Nota
+                          await showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return NotaDetalle(nota: nota,);
+                              });
+                        },
+                        child: Notes(
+                          //AÑADIR ICONO DE NOTA COMPLETADA
+                          colorIcon: nota.category.color,
+                          icon: nota.category.icon,
+                          title: nota.title,
+                          date: nota.date,
+                        ),
                       );
                     },
                     itemCount: notas.length,
