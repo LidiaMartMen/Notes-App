@@ -47,6 +47,10 @@ class NotesCard extends StatelessWidget {
                         onTap: () async {
                           //Mostrar detalles Nota
                           await showModalBottomSheet(
+                            backgroundColor: context.scaffolColor,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            ),
                               context: context,
                               builder: (context) {
                                 return NotaDetalle(nota: nota,);

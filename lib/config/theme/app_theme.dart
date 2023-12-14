@@ -20,7 +20,7 @@ class AppTheme {
       titleMedium: GoogleFonts.montserratAlternates()
         .copyWith( fontSize: 30, fontWeight: FontWeight.bold  , color: Colors.white ),
       titleSmall: GoogleFonts.montserratAlternates()
-        .copyWith( fontSize: 20  , color: Colors.white )
+        .copyWith( fontSize: 20  , color: colorSchemeSeed )
     ),
 
     //SCAFFOLD COLOR:

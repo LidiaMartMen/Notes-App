@@ -6,4 +6,5 @@ extension BuildContextExtension on BuildContext {
   ColorScheme get colorScheme => _theme.colorScheme;
   Size get deviceSize => MediaQuery.sizeOf(this);
   ButtonThemeData get buttonTheme => _theme.buttonTheme;
+  Color get scaffolColor => _theme.scaffoldBackgroundColor;
 }
