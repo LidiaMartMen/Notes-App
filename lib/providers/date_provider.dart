@@ -4,5 +4,5 @@
 import 'package:riverpod/riverpod.dart';
 
 final dateProvider = StateProvider<DateTime>((ref) {
-  return ;
+  return DateTime.now();
 });
