@@ -12,9 +12,7 @@ class HomeScreen extends StatelessWidget {
     final deviceSize = context.deviceSize;
 
     return Scaffold(
-        body: Stack(
-      children: [
-        Column(
+        body: Column(
           children: [
             Stack(
               children: [
@@ -41,17 +39,16 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+              
+               
               ],
             ),
+            const SizedBox(
+                width: 400,
+                height: 550,
+                child: VerticalListNotes(),
+                ),
           ],
-        ),
-         const Positioned(
-          top: 180,
-          left: 0,
-          right: 0,
-          child: VerticalListNotes(),
-        ),
-      ],
-    ));
+        ));
   }
 }

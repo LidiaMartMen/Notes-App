@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:notes_app_riverpod/data/entities/Note.dart';
+import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
@@ -14,10 +14,10 @@ class NotesCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Note> notes = ref.watch((notesProvider));
+    final List<Note2> notes = ref.watch((notesProvider));
 
     var emptyNoteDashboard =
-        isCompleted ? 'No hay notas' : 'No hay notas completadas';
+        isCompleted ? 'No hay notas completadas' : 'No hay notas';
 
     final colors = context.colorScheme;
     final deviceSize = context.deviceSize;

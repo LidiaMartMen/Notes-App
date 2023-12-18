@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:notes_app_riverpod/data/entities/Note.dart';
+import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 
 class NotaDetalle extends ConsumerWidget {
-  final Note note;
+  final Note2 note;
   const NotaDetalle({super.key, required this.note});
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:notes_app_riverpod/data/entities/Note.dart';
+
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
@@ -8,26 +8,31 @@ import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateNewNoteScreen extends ConsumerWidget {
-  final Note note;
+  //DECLARAR LOS CONTROLADORES DE TEXTO:
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
 
-  const CreateNewNoteScreen({
+  final Note2 note;
+
+  CreateNewNoteScreen({
     Key? key,
     required this.note,
-  }) : super(key: key);
+  }) :  titleController = TextEditingController(text: note.title),
+        descriptionController = TextEditingController(text: note.description),
+        super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //final DateTime date = ref.watch(dateProvider);
-    //Controlar cuando cambia el texto:
-    TextEditingController titleController = TextEditingController(
-      text: note.title,
-    );
 
     return SizedBox(
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            child: BuildNoteForm(titleController: titleController, note: note,),
+            child: BuildNoteForm(
+              titleController: titleController,
+              note: note,
+            ),
           ),
         ),
       ),
@@ -36,10 +41,11 @@ class CreateNewNoteScreen extends ConsumerWidget {
 }
 
 class BuildNoteForm extends ConsumerWidget {
-  final Note note;
+  final Note2 note;
   const BuildNoteForm({
     super.key,
-    required this.titleController, required this.note,
+    required this.titleController,
+    required this.note,
   });
 
   final TextEditingController titleController;
@@ -84,9 +90,7 @@ class BuildNoteForm extends ConsumerWidget {
                   hintText: 'Escriba el título de la nota aquí',
                   controller:
                       titleController, //OBSERVA CUANDO SE ESCRIBE ALGO AQUÍ
-                  onChangeFunctionProvider: (title) {}
-                  //=> ref.read(noteProvider(nota).notifier).onTitleChanged(value),
-                  ),
+                  onChangeFunctionProvider: (title) {}),
               const SizedBox(
                 height: 30,
               ),
@@ -135,7 +139,7 @@ class BuildNoteForm extends ConsumerWidget {
                   backgroundColor: context.colorScheme.primary,
                   onPressed: () {
                     context.push('/'); //NAVEGACIÓN A LA PANTALLA PRINCIPAL
-                    ref.read(notesProvider.notifier).addNote(Note(
+                    ref.read(notesProvider.notifier).addNote(Note2(
                         title: titleController.text,
                         description: titleController.text));
                   },
@@ -151,8 +155,6 @@ class BuildNoteForm extends ConsumerWidget {
     );
   }
 }
-
-
 
 class OutlinedTextField extends StatelessWidget {
   final String title;
@@ -198,8 +200,6 @@ class OutlinedTextField extends StatelessWidget {
     );
   }
 }
-
-
 
 class SelectCategory extends StatelessWidget {
   final List<NoteCategory> categories;

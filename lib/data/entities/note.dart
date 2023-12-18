@@ -1,11 +1,11 @@
 
 
-class Note {
+class Note2 {
 
   final String title;
   final String description;
 
-  Note( 
+  Note2( 
       {
  
       required this.title,
