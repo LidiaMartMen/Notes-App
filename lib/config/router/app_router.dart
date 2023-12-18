@@ -12,7 +12,7 @@ final appRouter = GoRouter(
     ///* NEW NOTE
     GoRoute(
       path: '/new-note',
-      builder: (context, state) => const CreateNewNoteScreen(),
+      builder: (context, state) =>  CreateNewNoteScreen(nota: nota,),
     ),
   
   ],

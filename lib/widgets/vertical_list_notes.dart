@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_app_riverpod/data/entities/Note.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
+import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
-class VerticalListNotes extends StatefulWidget {
+class VerticalListNotes extends ConsumerWidget {
   const VerticalListNotes({super.key});
 
   @override
-  State<VerticalListNotes> createState() => _VerticalListNotesState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Note> notes = ref.watch(notesProvider);
 
-class _VerticalListNotesState extends State<VerticalListNotes> {
-  var isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
@@ -25,9 +23,9 @@ class _VerticalListNotesState extends State<VerticalListNotes> {
           NotesCard(notas: [
             Nota(
               id: 1,
-              title: 'Lidia',
-              description: 'Hacer la compra',
-              date: '12-12-2023',
+              title: noteForm.title,
+              description: noteForm.description,
+              date: noteForm.date,
               isCompleted: false,
               category: NoteCategory.familia,
             ),
@@ -96,10 +94,11 @@ class _VerticalListNotesState extends State<VerticalListNotes> {
               backgroundColor: context.colorScheme.primary,
               onPressed: () {
                 context.push('/new-note');
-                setState(() => isPressed = !isPressed);
               },
               child: Text(
-                'Nueva nota', style: context.textTheme.titleSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                'Nueva nota',
+                style: context.textTheme.titleSmall?.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ))
         ],
       ),
