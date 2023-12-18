@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_riverpod/data/entities/entities.dart';
+
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
@@ -8,7 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Nota nota;
     final colors = context.colorScheme;
     final deviceSize = context.deviceSize;
 
@@ -46,7 +45,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-         Positioned(
+         const Positioned(
           top: 180,
           left: 0,
           right: 0,

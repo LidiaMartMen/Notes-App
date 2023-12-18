@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_riverpod/data/entities/entities.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notes_app_riverpod/data/entities/Note.dart';
+import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
-import 'package:notes_app_riverpod/widgets/notes.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
-class NotesCard extends StatelessWidget {
-  final List<Nota> notas;
+class NotesCard extends ConsumerWidget {
+
+
   final bool isCompleted;
 
-  const NotesCard({super.key, required this.notas, this.isCompleted = false});
+  const NotesCard( {super.key, this.isCompleted = false});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Note> notes = ref.watch((notesProvider));
+
     var emptyNoteDashboard =
         isCompleted ? 'No hay notas' : 'No hay notas completadas';
 
@@ -28,7 +32,7 @@ class NotesCard extends StatelessWidget {
               color: colors.primaryContainer),
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: notas.isEmpty
+            child: notes.isEmpty
                 ? Center(
                     child: Text(
                       emptyNoteDashboard,
@@ -36,36 +40,35 @@ class NotesCard extends StatelessWidget {
                     ),
                   )
                 : ListView.separated(
-                    shrinkWrap: false,
                     itemBuilder: (context, index) {
-                      final nota = notas[index];
+                      final note = notes[index];
 
                       return InkWell(
-
                         //TODO: deslizar izq para borrar nota:
-                        
+
                         onTap: () async {
                           //Mostrar detalles Nota
                           await showModalBottomSheet(
-                            backgroundColor: context.scaffolColor,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                            ),
+                              backgroundColor: context.scaffolColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                              ),
                               context: context,
                               builder: (context) {
-                                return NotaDetalle(nota: nota,);
+                                return NotaDetalle(
+                                  note: note,
+                                );
                               });
                         },
                         child: Notes(
                           //AÑADIR ICONO DE NOTA COMPLETADA
-                          colorIcon: nota.category.color,
-                          icon: nota.category.icon,
-                          title: nota.title,
-                          date: nota.date,
+                          title: note.title,
+                          description: note.description,
                         ),
                       );
                     },
-                    itemCount: notas.length,
+                    itemCount: notes.length,
                     //AÑADIR UNA LÍNEA ENTRE NOTAS, CAMBIO EL LISTVIEW.BUILDER POR SEPARATED:
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(

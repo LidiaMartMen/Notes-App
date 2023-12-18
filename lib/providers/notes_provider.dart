@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:notes_app_riverpod/data/entities/entities.dart';
-import 'package:notes_app_riverpod/providers/note_provider.dart';
+import 'package:notes_app_riverpod/data/entities/Note.dart';
+
 
 //CREAMOS EL STATE:
 class NoteState {
@@ -28,14 +28,14 @@ class NoteState {
 }
 
 //NOTIFIER:
-class NotesNotifier extends StateNotifier<List<Nota>> {
+class NotesNotifier extends StateNotifier<List<Note>> {
   NotesNotifier() : super([]);
 
 //MÉTODO:
-  void addNote(Nota nota) {
-    state = [...state, nota];
+  void addNote(Note note) {
+    state = [...state, note];
   }
 }
 
 //PROVIDER:
-final notesProvider = StateNotifierProvider<NotesNotifier, List<Nota>>((ref) => NotesNotifier());
+final notesProvider = StateNotifierProvider<NotesNotifier, List<Note>>((ref) => NotesNotifier());

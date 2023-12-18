@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:notes_app_riverpod/data/entities/Note.dart';
 import 'package:notes_app_riverpod/screens/screens.dart';
-
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -9,11 +9,16 @@ final appRouter = GoRouter(
       path: '/',
       builder: (context, state) => const HomeScreen(),
     ),
+
     ///* NEW NOTE
     GoRoute(
       path: '/new-note',
-      builder: (context, state) =>  CreateNewNoteScreen(nota: nota,),
+      builder: (context, state) {
+        final Note note = state.pathParameters['note'] as Note;
+
+        final Note myNote = note;
+        return CreateNewNoteScreen(note: myNote);
+      },
     ),
-  
   ],
 );
