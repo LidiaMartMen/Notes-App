@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
-import 'package:notes_app_riverpod/providers/notes_provider.dart';
+import 'package:notes_app_riverpod/providers/filters_providers.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
@@ -14,10 +14,12 @@ class NotesCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Note2> notes = ref.watch((notesProvider));
 
-    var emptyNoteDashboard =
-        isCompleted ? 'No hay notas completadas' : 'No hay notas';
+
+    //Obtengo las notas de la lista según el filtro actual:
+    final List<Note2> notesFiltered = ref.watch(filteredNotes);
+    
+   
 
     final colors = context.colorScheme;
     final deviceSize = context.deviceSize;
@@ -33,19 +35,13 @@ class NotesCard extends ConsumerWidget {
               color: colors.primaryContainer),
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: notes.isEmpty
-                ? Center(
-                    child: Text(
-                      emptyNoteDashboard,
-                      style: context.textTheme.bodySmall,
-                    ),
-                  )
-                : ListView.separated(
+            child:  ListView.separated(
+                  //TODO: CAMBIAR A LISTVIEW.BUILDER Y AÑADIR DISMISSIBLE PARA ELIMINAR NOTAS DESLIZANDO, añadir deleted function en provider
                     itemBuilder: (context, index) {
-                      final note = notes[index];
+                      final note = notesFiltered[index];
 
                       return InkWell(
-                        //TODO: deslizar izq para borrar nota:
+                        
 
                         onTap: () async {
                           //Mostrar detalles Nota
@@ -73,7 +69,7 @@ class NotesCard extends ConsumerWidget {
                         ),
                       );
                     },
-                    itemCount: notes.length,
+                    itemCount: notesFiltered.length,
                     //AÑADIR UNA LÍNEA ENTRE NOTAS, CAMBIO EL LISTVIEW.BUILDER POR SEPARATED:
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(

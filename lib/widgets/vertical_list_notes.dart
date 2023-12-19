@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
@@ -9,6 +10,8 @@ class VerticalListNotes extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+   
 
 
     return SingleChildScrollView(
@@ -20,7 +23,6 @@ class VerticalListNotes extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Expanded(child: NotesCard()),
-            
             const SizedBox(
               height: 10,
             ),
@@ -29,7 +31,6 @@ class VerticalListNotes extends ConsumerWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: context.colorScheme.primary,
                 onPressed: () {
-               
                   context.go('/new-note'); //Ir a new-note
                 },
                 child: Text(

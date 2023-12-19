@@ -9,8 +9,6 @@ class NoteState {
   final NoteCategory category;
   final bool? isCompleted;
 
-  //final NoteCategory category; //TODO
-
   NoteState({
     this.isCompleted = false, //NO COMPLETADA
     required this.title,
