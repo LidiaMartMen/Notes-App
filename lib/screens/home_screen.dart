@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  height: deviceSize.height * 0.3,
+                  height: deviceSize.height * 0.25,
                   width: deviceSize.width,
                   color: colors.primary,
                   child: Column(
@@ -49,8 +49,8 @@ class HomeScreen extends StatelessWidget {
                 height: 550,
                 child: VerticalListNotes(),
                 ),
-            const BottomMenu(),
           ],
-        ));
+        ),
+        bottomNavigationBar: const BottomMenu(),);
   }
 }

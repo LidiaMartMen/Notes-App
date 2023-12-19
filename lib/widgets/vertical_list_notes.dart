@@ -15,17 +15,14 @@ class VerticalListNotes extends ConsumerWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
       child: SizedBox(
-        height: 400,
+        height: 500,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Expanded(child: NotesCard()),
-            Text('Completadas',
-                style: context.textTheme.titleMedium
-                    ?.copyWith(color: context.colorScheme.primary)),
-            const Text('Colocar aquí las tareas completadas'),
+            
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             FloatingActionButton(
                 hoverColor: context.colorScheme.tertiary,
