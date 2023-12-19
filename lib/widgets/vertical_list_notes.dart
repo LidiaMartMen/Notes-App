@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:notes_app_riverpod/data/entities/note.dart';
-
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
@@ -11,6 +9,8 @@ class VerticalListNotes extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
@@ -32,9 +32,9 @@ class VerticalListNotes extends ConsumerWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: context.colorScheme.primary,
                 onPressed: () {
-                  final Note2 newNote =
-                      Note2(title: 'Hola', description: 'holaaaa');
-                  context.go('/new-note', extra:{'note': newNote} );
+              
+                  context.go('/new-note'); //Ir a new-note
+   
                 },
                 child: Text(
                   'Nueva nota',

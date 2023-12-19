@@ -1,37 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_app_riverpod/data/constantes.dart';
 
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notes_app_riverpod/utils/helpers.dart';
 
-class CreateNewNoteScreen extends ConsumerWidget {
-  //DECLARAR LOS CONTROLADORES DE TEXTO:
-  final TextEditingController titleController;
-  final TextEditingController descriptionController;
-
-  final Note2 note;
-
-  CreateNewNoteScreen({
+class CreateNewNoteScreen extends ConsumerStatefulWidget {
+  const CreateNewNoteScreen({
     Key? key,
-    required this.note,
-  }) :  titleController = TextEditingController(text: note.title),
-        descriptionController = TextEditingController(text: note.description),
-        super(key: key);
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //final DateTime date = ref.watch(dateProvider);
+  CreateNewNoteScreenState createState() => CreateNewNoteScreenState();
+}
 
+class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
+  //DECLARAR LOS CONTROLADORES DE TEXTO:
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  NoteCategory? selectedCategory;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   titleController.text = widget.note.title;
+  //   descriptionController.text = widget.note.description;
+  //   dateController.text = Helpers.dateFormatter(ref.read(
+  //       dateProvider)); //inicializado con la fecha actual del dateProvider
+  // }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    dateController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
             child: BuildNoteForm(
               titleController: titleController,
-              note: note,
+              descriptionController: descriptionController,
+              dateController: dateController,
+              selectedCategory: selectedCategory,
+              onCategorySelected: (selectedCat) {
+                //Actualiza la categoría seleccionada:
+                setState(() {
+                  selectedCategory = selectedCat;
+                });
+              },
+              categories: categories,
             ),
           ),
         ),
@@ -41,17 +69,33 @@ class CreateNewNoteScreen extends ConsumerWidget {
 }
 
 class BuildNoteForm extends ConsumerWidget {
-  final Note2 note;
+
+  final List<NoteCategory> categories;
+
+  
+
   const BuildNoteForm({
+    required this.selectedCategory,
+    required this.onCategorySelected,
     super.key,
     required this.titleController,
-    required this.note,
+    required this.descriptionController,
+    required this.dateController,
+    required this.categories,
   });
 
   final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final TextEditingController dateController;
+  final NoteCategory? selectedCategory;
+  final Function(NoteCategory) onCategorySelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    DateTime? selectedDate = ref.watch(dateProvider);
+
+
     return Column(
       children: [
         Container(
@@ -103,10 +147,10 @@ class BuildNoteForm extends ConsumerWidget {
                 height: 10,
               ),
               OutlinedTextField(
-                  maxLines: 3,
+                  maxLines: 2,
                   title: 'Descripción',
                   hintText: 'Escriba la descripción',
-                  controller: titleController,
+                  controller: descriptionController,
                   onChangeFunctionProvider: (description) {}),
               const SizedBox(
                 height: 30,
@@ -119,17 +163,36 @@ class BuildNoteForm extends ConsumerWidget {
               const SizedBox(
                 height: 10,
               ),
-              const OutlinedTextField(
-                title: 'Fecha',
-                hintText: 'Hola',
-                //Helpers.dateFormatter(date),
-                controller: null,
-                //onChangeFunction: Helpers.selectDate(context, ref),
-              ),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          context.colorScheme.primary),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white)),
+                  child: 
+                  Text(
+                    selectedDate == null || selectedDate == DateTime.now()
+                    ? 'Seleccione la fecha'
+                    : 'Fecha seleccionada: ${Helpers.dateFormatter(selectedDate)}'
+                    , style: context.textTheme.titleSmall?.copyWith(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  onPressed: () async {
+                    //Selecciona la fecha:
+                    await Helpers.selectDate(context, ref);
+                    //Actualiza el controlador de texto:
+                    dateController.text =
+                        Helpers.dateFormatter(ref.read(dateProvider));
+                  }),
               const SizedBox(
                 height: 10,
               ),
-              const SelectCategory(categories: []),
+              SelectCategory(
+                categories: categories,
+                onCategorySelected: onCategorySelected,
+              ),
               const SizedBox(
                 height: 30,
               ),
@@ -139,9 +202,20 @@ class BuildNoteForm extends ConsumerWidget {
                   backgroundColor: context.colorScheme.primary,
                   onPressed: () {
                     context.push('/'); //NAVEGACIÓN A LA PANTALLA PRINCIPAL
+                    //GUARDAR LA NOTA EN EL STATE DEL PROVIDER:
                     ref.read(notesProvider.notifier).addNote(Note2(
+                        category: selectedCategory,
+                        isCompleted: true,
+                        date: dateController.text,
                         title: titleController.text,
-                        description: titleController.text));
+                        description: descriptionController.text));
+                    //BORRAR LOS CAMPOS DE TEXTO DEL FORM:
+                    clearForm(
+                        titleController: titleController,
+                        descriptionController: descriptionController,
+                        dateController: dateController,
+                        selectedCategory: selectedCategory,
+                        categories: categories);
                   },
                   child: Text('GUARDAR NOTA',
                       style: context.textTheme.titleSmall?.copyWith(
@@ -193,10 +267,8 @@ class OutlinedTextField extends StatelessWidget {
         hintStyle: context.textTheme.bodySmall,
         border: const OutlineInputBorder(),
       ),
-      //TODO: FUNCIÓN PARA COGER LA FECHA DEL CALENDARIO
-      onChanged:
-          //onChangeFunctionDate,
-          onChangeFunctionProvider,
+
+      onChanged: onChangeFunctionProvider,
     );
   }
 }
@@ -204,7 +276,10 @@ class OutlinedTextField extends StatelessWidget {
 class SelectCategory extends StatelessWidget {
   final List<NoteCategory> categories;
 
-  const SelectCategory({super.key, required this.categories});
+  final Function(NoteCategory) onCategorySelected;
+
+  const SelectCategory(
+      {super.key, required this.categories, required this.onCategorySelected});
 
   @override
   Widget build(BuildContext context) {
@@ -228,18 +303,23 @@ class SelectCategory extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 shrinkWrap: false,
                 itemBuilder: (context, index) {
-                  //final category = categories[index];
-                  //TODO: AÑADIR CIRCULOS CON LAS CATEGORÍAS:
-                  return Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red.withOpacity(0.2)),
-                    child: const Icon(Icons.abc_outlined),
+                  final category = categories[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      onCategorySelected(category);
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: category.color.withOpacity(0.2)),
+                      child: Icon(category.icon),
+                    ),
                   );
                 },
-                itemCount: 7,
+                itemCount: categories.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(
                     width: 8,

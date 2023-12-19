@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app_riverpod/providers/date_provider.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:notes_app_riverpod/data/entities/categories.dart';
+import 'package:notes_app_riverpod/providers/notes_provider.dart';
 
 class Helpers {
   //FUNCIÓN CALENDARIO: DATE
-  static void selectDate(BuildContext context, ref) async {
-    final DateTime initialDate = ref.watch<StateProvider>(dateProvider);
+  static Future<void> selectDate(BuildContext context, WidgetRef ref) async {
+ 
+    final DateTime initialDate = ref
+        .watch(dateProvider.notifier)
+        .state; //OBTENER VALOR GUARDADO EN PROVIDER
 
-    DateTime? fechaSeleccionada = await showDatePicker(
+ 
+
+    DateTime? selectedDate = await showDatePicker(
         context: context,
-        initialDate: initialDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2021),
         lastDate: DateTime(2090));
 
+    
+
 //DECIRLE AL PROVIDER QUE VALOR SE HA SELECCIONADO:
-    if (fechaSeleccionada != null) {
-      fechaSeleccionada = ref.read(dateProvider.notifier).state;
+    if (selectedDate != null && selectedDate != initialDate) {
+      ref.read(dateProvider.notifier).state =
+          selectedDate; //Actualiza el valor del provider con el nuevo día seleccionado
     }
   }
 
@@ -31,3 +40,17 @@ class Helpers {
     }
   }
 }
+
+//FUNCIÓN PARA BORRAR LOS TEXTOS DEL FORMULARIO:
+void clearForm({
+  required TextEditingController titleController,
+  required TextEditingController descriptionController,
+  required TextEditingController dateController,
+  required NoteCategory? selectedCategory,
+  required List<NoteCategory> categories,
+}) {
+  titleController.text = '';
+  descriptionController.text = '';
+  dateController.text = '';
+  selectedCategory= null;
+  }
