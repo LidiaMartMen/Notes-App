@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:notes_app_riverpod/utils/extensions.dart';
+import 'package:notes_app_riverpod/widgets/bottom_menu.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -48,6 +49,7 @@ class HomeScreen extends StatelessWidget {
                 height: 550,
                 child: VerticalListNotes(),
                 ),
+            const BottomMenu(),
           ],
         ));
   }

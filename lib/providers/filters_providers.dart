@@ -20,9 +20,9 @@ final filteredNotes = Provider<List<Note2>>((ref) {
   final notes = ref.watch(notesProvider);
 
   switch (filter) {
-    case noteListFilter.completed:
+    case NoteListFilter.completed:
       return notes.where((note) => note.isCompleted).toList();
-    case noteListFilter.active:
+    case NoteListFilter.active:
       return notes.where((note) => !note.isCompleted).toList();
     case NoteListFilter.all: //devuelve todas las notas
       return notes;
