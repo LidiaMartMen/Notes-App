@@ -62,13 +62,13 @@ class NotesCard extends ConsumerWidget {
                               });
                         },
                         child: Notes(
-                          
-                          //AÑADIR ICONO DE NOTA COMPLETADA
                           title: note.title,
                           description: note.description, 
                           date: note.date, 
                           icon: note.category?.icon ?? Icons.error, 
-                          colorIcon: note.category?.color ?? Colors.transparent,
+                          colorIcon: note.category?.color ?? Colors.transparent, 
+                          isCompleted: note.isCompleted, 
+                          note: note,
                         ),
                       );
                     },

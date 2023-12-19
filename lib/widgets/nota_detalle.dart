@@ -24,38 +24,39 @@ class NotaDetalle extends ConsumerWidget {
                 children: [
                   Text(
                     'Detalles',
-                    style: context.textTheme.bodyLarge,
+                    style: context.textTheme.titleSmall,
                   ),
                   const Divider(),
                   const SizedBox(
                     height: 40,
                   ),
-                  // Icon(
-                  //   note.category.icon,
-                  //   size: 80,
-                  //   color: nota.category.color,
-                  // ),
+                  Icon(
+                    note.category?.icon,
+                    size: 80,
+                    color: note.category?.color,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
                     'Título: ${note.title}',
-                    style: context.textTheme.bodyLarge
-                        ?.copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: context.textTheme.titleMedium
+                        ?.copyWith(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
                     'Descripción: ${note.description}',
-                    style: context.textTheme.bodyMedium,
+                    style: context.textTheme.titleSmall,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    '',
-                    style: context.textTheme.bodyMedium,
+                    'Fecha: ${note.date}',
+                    style: context.textTheme.titleSmall,
                   ),
                 ],
               ),
