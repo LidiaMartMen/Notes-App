@@ -44,6 +44,8 @@ class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+
     return SizedBox(
       child: Scaffold(
         body: SafeArea(
@@ -53,12 +55,6 @@ class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
               descriptionController: descriptionController,
               dateController: dateController,
               selectedCategory: selectedCategory,
-              onCategorySelected: (selectedCat) {
-                //Actualiza la categoría seleccionada:
-                setState(() {
-                  selectedCategory = selectedCat;
-                });
-              },
               categories: categories,
             ),
           ),
@@ -69,14 +65,10 @@ class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
 }
 
 class BuildNoteForm extends ConsumerWidget {
-
   final List<NoteCategory> categories;
-
-  
 
   const BuildNoteForm({
     required this.selectedCategory,
-    required this.onCategorySelected,
     super.key,
     required this.titleController,
     required this.descriptionController,
@@ -88,13 +80,12 @@ class BuildNoteForm extends ConsumerWidget {
   final TextEditingController descriptionController;
   final TextEditingController dateController;
   final NoteCategory? selectedCategory;
-  final Function(NoteCategory) onCategorySelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     DateTime? selectedDate = ref.watch(dateProvider);
-
+    final NoteCategory? selectedCategory =
+        ref.watch(selectedCategoryProvider.notifier).state;
 
     return Column(
       children: [
@@ -169,12 +160,11 @@ class BuildNoteForm extends ConsumerWidget {
                           context.colorScheme.primary),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white)),
-                  child: 
-                  Text(
-                    selectedDate == null || selectedDate == DateTime.now()
-                    ? 'Seleccione la fecha'
-                    : 'Fecha seleccionada: ${Helpers.dateFormatter(selectedDate)}'
-                    , style: context.textTheme.titleSmall?.copyWith(
+                  child: Text(
+                      selectedDate == null || selectedDate == DateTime.now()
+                          ? 'Seleccione la fecha'
+                          : 'Fecha seleccionada: ${Helpers.dateFormatter(selectedDate)}',
+                      style: context.textTheme.titleSmall?.copyWith(
                         fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -191,7 +181,6 @@ class BuildNoteForm extends ConsumerWidget {
               ),
               SelectCategory(
                 categories: categories,
-                onCategorySelected: onCategorySelected,
               ),
               const SizedBox(
                 height: 30,
@@ -209,6 +198,8 @@ class BuildNoteForm extends ConsumerWidget {
                         date: dateController.text,
                         title: titleController.text,
                         description: descriptionController.text));
+                 
+
                     //BORRAR LOS CAMPOS DE TEXTO DEL FORM:
                     clearForm(
                         titleController: titleController,
@@ -273,16 +264,18 @@ class OutlinedTextField extends StatelessWidget {
   }
 }
 
-class SelectCategory extends StatelessWidget {
+class SelectCategory extends ConsumerWidget {
   final List<NoteCategory> categories;
 
-  final Function(NoteCategory) onCategorySelected;
-
-  const SelectCategory(
-      {super.key, required this.categories, required this.onCategorySelected});
+  const SelectCategory({
+    super.key,
+    required this.categories,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCategory = ref.watch(selectedCategoryProvider.notifier).state;
+
     return SizedBox(
       height: 80,
       child: Row(
@@ -307,14 +300,18 @@ class SelectCategory extends StatelessWidget {
 
                   return GestureDetector(
                     onTap: () {
-                      onCategorySelected(category);
+                      ref.read(selectedCategoryProvider.notifier).state =
+                          category;
+                        
                     },
                     child: Container(
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: category.color.withOpacity(0.2)),
+                          color: category == selectedCategory
+                              ? category.color.withOpacity(0.5)
+                              : category.color.withOpacity(0.2)),
                       child: Icon(category.icon),
                     ),
                   );

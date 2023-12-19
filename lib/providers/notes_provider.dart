@@ -47,6 +47,10 @@ final dateProvider = StateProvider<DateTime>((ref) {
   return DateTime.now();
 });
 
+//MÉTODO PARA GUARDAR LA CATEGORÍA SELECCIONADA:
+final selectedCategoryProvider = StateProvider<NoteCategory?>((ref) => null);
+
+
 //PROVIDER:
 final notesProvider =
     StateNotifierProvider<NotesNotifier, List<Note2>>((ref) => NotesNotifier());

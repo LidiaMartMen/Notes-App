@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_app_riverpod/data/entities/entities.dart';
+import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
@@ -32,15 +34,14 @@ class VerticalListNotes extends ConsumerWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: context.colorScheme.primary,
                 onPressed: () {
-              
+               
                   context.go('/new-note'); //Ir a new-note
-   
                 },
                 child: Text(
                   'Nueva nota',
                   style: context.textTheme.titleSmall?.copyWith(
                       color: Colors.white, fontWeight: FontWeight.bold),
-                ))
+                )),
           ],
         ),
       ),
