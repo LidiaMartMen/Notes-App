@@ -43,7 +43,7 @@ class Notes extends ConsumerWidget {
           Checkbox(
             value: note.isCompleted,
             onChanged: (value) {
-              ref.read(notesProvider.notifier).updateNote(note.title);
+              ref.read(notesProvider.notifier).updateNote(note);
             },
             activeColor: colors.primary,
             checkColor: Colors.white,

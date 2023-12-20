@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
+import 'package:notes_app_riverpod/screens/edit_note_screen.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 
 class NotaDetalle extends ConsumerWidget {
@@ -80,14 +81,18 @@ class NotaDetalle extends ConsumerWidget {
                       onPressed: () {
                         final selectedNote = note;
                         //Guardar la selección en el state:
-                        ref.read(notesProvider.notifier).saveSelectedNote(selectedNote);
-                        //Ir a new-note
-                        context.push('/edit-note');
+                        ref
+                            .read(notesProvider.notifier)
+                            .saveSelectedNote(selectedNote);
+                        //Ir a edit-note
+                        _showEditNoteScreen(context);
                       },
                       child: Text(
                         'Editar',
                         style: context.textTheme.titleSmall?.copyWith(
-                            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
                       )),
                 ],
               ),
@@ -97,4 +102,35 @@ class NotaDetalle extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _showEditNoteScreen(BuildContext context) async {
+  await Navigator.of(context).push(
+    _createPageRoute(const EditNoteScreen()),
+  );
+}
+
+PageRouteBuilder _createPageRoute(Widget page) {
+  return PageRouteBuilder(
+    opaque: false,
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOutQuart;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      // Cambiar el valor para ajustar el tamaño de la pantalla de edición
+      double scale = 0.9;
+      var scaledAnimation =
+          Tween<double>(begin: 1.0, end: scale).animate(animation);
+
+      return ScaleTransition(
+        scale: scaledAnimation,
+        child: SlideTransition(position: offsetAnimation, child: child),
+      );
+    },
+  );
 }

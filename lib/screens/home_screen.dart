@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     final colors = context.colorScheme;
     final deviceSize = context.deviceSize;
     //TODO: GUARDAR NOTAS POR USUARIO CON SHARED PREFERENCES
-    //todo: añadir nota como no completada
+  
 
     return Scaffold(
         body: Column(
