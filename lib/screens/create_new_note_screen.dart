@@ -250,6 +250,7 @@ class OutlinedTextField extends StatelessWidget {
       }, //PARA QUITAR EL FOCO
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search),
+        //TODO: INCLUIR LA FUNCIÓN PARA BORRAR EL TEXTO AL PULSAR LA X
         suffixIcon: const Icon(Icons.clear),
         labelText: title,
         labelStyle: context.textTheme.titleSmall,

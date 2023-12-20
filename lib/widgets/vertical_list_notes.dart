@@ -33,6 +33,7 @@ class VerticalListNotes extends ConsumerWidget {
                 onPressed: () {
                   context.go('/new-note'); //Ir a new-note
                 },
+                //TODO: AÑADIR BOTÓN DE EDITAR NOTA
                 child: Text(
                   'Nueva nota',
                   style: context.textTheme.titleSmall?.copyWith(

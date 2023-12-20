@@ -58,6 +58,12 @@ class NotesNotifier extends StateNotifier<List<Note2>> {
     }
     state = newState;
   }
+
+  //MÉTODO BORRAR NOTA:
+  void deleteNote(String title) {
+    //Generar un nuevo estado con todas las notas menos la que su título sea igual al que quiero borrar:
+    state = state.where((note) => note.title != title).toList();
+  }
 }
 
 //METODO MANEJA LA FECHA ACTUAL, SETTEADO A CURRENT DATE AND TIME
@@ -71,5 +77,3 @@ final selectedCategoryProvider = StateProvider<NoteCategory?>((ref) => null);
 //PROVIDER:
 final notesProvider =
     StateNotifierProvider<NotesNotifier, List<Note2>>((ref) => NotesNotifier());
-
-
