@@ -27,13 +27,13 @@ class VerticalListNotes extends ConsumerWidget {
               height: 10,
             ),
             FloatingActionButton(
+              heroTag: 'New note',
                 hoverColor: context.colorScheme.tertiary,
                 foregroundColor: Colors.white,
                 backgroundColor: context.colorScheme.primary,
                 onPressed: () {
                   context.go('/new-note'); //Ir a new-note
                 },
-                //TODO: AÑADIR BOTÓN DE EDITAR NOTA
                 child: Text(
                   'Nueva nota',
                   style: context.textTheme.titleSmall?.copyWith(

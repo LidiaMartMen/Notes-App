@@ -7,27 +7,14 @@ import 'package:notes_app_riverpod/utils/extensions.dart';
 class Notes extends ConsumerWidget {
   final Note2 note;
 
-  final bool isCompleted;
-  final String date;
-  final Color colorIcon;
-  final String title;
-  final String description;
-  final IconData icon;
-  const Notes( 
-      {required this.note,
-        required this.isCompleted,
-      required this.date,
-      super.key,
-      required this.icon,
-      required this.title,
-      required this.description,
-      required this.colorIcon});
+  const Notes({
+    super.key,
+    required this.note,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final colors = Theme.of(context).colorScheme;
-
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -40,29 +27,27 @@ class Notes extends ConsumerWidget {
       child: Row(
         children: [
           Icon(
-            icon,
-            color: colorIcon,
+            note.category?.icon ?? Icons.error,
+            color:  note.category?.color ?? Colors.transparent,
           ),
           const Spacer(),
           Text(
-            title,
+            note.title,
             style: context.textTheme.titleSmall
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(
             width: 20,
           ),
-          Text(date),
+          Text(note.date),
           Checkbox(
-              value: note.isCompleted,
-              onChanged: (value) {
-                ref
-                    .read(notesProvider.notifier)
-                    .updateNote(note.title);
-              },
-              activeColor:  colors.primary,
-              checkColor: Colors.white,
-              )
+            value: note.isCompleted,
+            onChanged: (value) {
+              ref.read(notesProvider.notifier).updateNote(note.title);
+            },
+            activeColor: colors.primary,
+            checkColor: Colors.white,
+          )
         ],
       ),
     );

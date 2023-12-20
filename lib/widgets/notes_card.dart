@@ -65,12 +65,6 @@ class NotesCard extends ConsumerWidget {
                         });
                   },
                   child: Notes(
-                    title: note.title,
-                    description: note.description,
-                    date: note.date,
-                    icon: note.category?.icon ?? Icons.error,
-                    colorIcon: note.category?.color ?? Colors.transparent,
-                    isCompleted: note.isCompleted,
                     note: note,
                   ),
                 ),

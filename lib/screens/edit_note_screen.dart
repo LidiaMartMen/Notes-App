@@ -1,64 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/data/constantes.dart';
-
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
+import 'package:notes_app_riverpod/screens/create_new_note_screen.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app_riverpod/utils/helpers.dart';
 import 'package:notes_app_riverpod/widgets/select_category.dart';
 import 'package:notes_app_riverpod/widgets/widgets.dart';
 
-class CreateNewNoteScreen extends ConsumerStatefulWidget {
-  const CreateNewNoteScreen({
+class EditNoteScreen extends ConsumerWidget {
+  const EditNoteScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  CreateNewNoteScreenState createState() => CreateNewNoteScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    //Acceder a la nota seleccionada desde el provider:
+    final selectedNote = ref.watch(notesProvider.notifier).getSelectedNote();
 
-class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
-  //DECLARAR LOS CONTROLADORES DE TEXTO:
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  NoteCategory? selectedCategory;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   titleController.text = widget.note.title;
-  //   descriptionController.text = widget.note.description;
-  //   dateController.text = Helpers.dateFormatter(ref.read(
-  //       dateProvider)); //inicializado con la fecha actual del dateProvider
-  // }
-
-  @override
-  void dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
-    dateController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
+
+    //Inicializar controladores de texto con los valores de selectedNote:
+    final TextEditingController titleController =
+        TextEditingController(text: selectedNote?.title);
+    final TextEditingController descriptionController =
+        TextEditingController(text: selectedNote?.description);
+    final TextEditingController dateController =
+        TextEditingController(text: selectedNote?.date);
 
     return SizedBox(
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            child: BuildNoteForm(
+            child: BuildEditNoteForm(
               titleController: titleController,
               descriptionController: descriptionController,
               dateController: dateController,
               selectedCategory: selectedCategory,
-              categories: categories, 
-              titleScreen: 'NOTA NUEVA',
+              categories: categories,
+              titleScreen: 'EDITAR NOTA',
             ),
           ),
         ),
@@ -67,10 +49,10 @@ class CreateNewNoteScreenState extends ConsumerState<CreateNewNoteScreen> {
   }
 }
 
-class BuildNoteForm extends ConsumerWidget {
+class BuildEditNoteForm extends ConsumerWidget {
   final List<NoteCategory> categories;
 
-  const BuildNoteForm({
+  const BuildEditNoteForm({
     required this.titleScreen,
     required this.selectedCategory,
     super.key,
@@ -210,28 +192,27 @@ class BuildNoteForm extends ConsumerWidget {
                           content: Text('Todos los campos son obligatorios')));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Nota agregada correctamente')));
-                      //GUARDAR LA NOTA EN EL STATE DEL PROVIDER:
-                      ref.read(notesProvider.notifier).addNote(Note2(
-                          category: selectedCategory,
-                          isCompleted: false,
-                          date: dateController.text,
-                          title: titleController.text,
-                          description: descriptionController.text));
+                          content: Text('Nota modificada correctamente')));
 
-                      //BORRAR LOS CAMPOS DE TEXTO DEL FORM:
-                      clearForm(
-                          titleController: titleController,
-                          descriptionController: descriptionController,
-                          dateController: dateController,
-                          selectedCategory: selectedCategory,
-                          categories: categories);
+                      // Obtener la nota actualizada con los nuevos valores
+                          final updatedNote = Note2(
+                            title: titleController.text,
+                            description: descriptionController.text,
+                            date: dateController.text,
+                            category: selectedCategory,
+                            isCompleted: false,
+                          );
+                      
+
+                      //Editar la nota existente:
+                      ref.read(notesProvider.notifier).editNote(updatedNote);
+                     
 
                       //NAVEGACIÓN A LA PANTALLA PRINCIPAL
                       context.push('/');
                     }
                   },
-                  child: Text('GUARDAR NOTA',
+                  child: Text('GUARDAR NOTA EDITADA',
                       style: context.textTheme.titleSmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
