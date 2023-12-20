@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/data/constantes.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
-import 'package:notes_app_riverpod/screens/create_new_note_screen.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 import 'package:notes_app_riverpod/utils/helpers.dart';
 import 'package:notes_app_riverpod/widgets/select_category.dart';

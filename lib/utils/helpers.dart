@@ -39,6 +39,9 @@ class Helpers {
       );
     }
   }
+
+
+
 }
 
 //FUNCIÓN PARA BORRAR LOS TEXTOS DEL FORMULARIO:

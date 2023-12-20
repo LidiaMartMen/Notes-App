@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
 import 'package:notes_app_riverpod/screens/edit_note_screen.dart';
