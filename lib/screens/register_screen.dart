@@ -85,7 +85,7 @@ class RegisterScreen extends StatelessWidget {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Usuario registrado correctamente')));
-                          
+
                       //Guardar usuario en SharedPreferences:
                       final newUser = User(name, password);
                       await UserService.addUser(newUser);
@@ -102,7 +102,21 @@ class RegisterScreen extends StatelessWidget {
                   style: context.textTheme.titleSmall
                       ?.copyWith(color: Colors.white),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    context.go('/login');
+                  },
+                  child:
+                      Column(
+                        children: [
+                          Text('Si ya tienes un usuario:', style: context.textTheme.titleSmall, textAlign: TextAlign.center,),
+                          Text('!Inicia sesión!', style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
+                        ],
+                      )),
             ],
           ),
         ),

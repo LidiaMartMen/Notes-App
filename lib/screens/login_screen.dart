@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   //Añade un formKey al Form:
-  final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
 
   LoginScreen({super.key});
 
@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () async {
                   //Validar el formulario:
                   if (_formKey.currentState?.validate() ?? false) {
-                        //Acceder al nombre y contraseña:
+                    //Acceder al nombre y contraseña:
                     final name = nameController.text;
                     final password = passwordController.text;
 
@@ -78,7 +78,8 @@ class LoginScreen extends StatelessWidget {
                     final savedUserList = await UserService.getUsersList();
 
                     //Comparar lo que ha escrito con lo que tenemos guardado:
-                    if (savedUserList.any((user) => user.name == name && user.password == password)) {
+                    if (savedUserList.any((user) =>
+                        user.name == name && user.password == password)) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Inicio de sesión exitoso')));
                       context.push('/home-screen');
@@ -97,8 +98,20 @@ class LoginScreen extends StatelessWidget {
                       ?.copyWith(color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 15,),
-              const Text('Si no tienes un usuario: !registrate aquí!'),
+              const SizedBox(
+                height: 15,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    context.go('/register');
+                  },
+                  child:
+                      Column(
+                        children: [
+                          Text('Si no tienes un usuario:', style: context.textTheme.titleSmall, textAlign: TextAlign.center,),
+                          Text('!registrate aquí!', style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
+                        ],
+                      )),
             ],
           ),
         ),
