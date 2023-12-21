@@ -96,7 +96,9 @@ class LoginScreen extends StatelessWidget {
                   style: context.textTheme.titleSmall
                       ?.copyWith(color: Colors.white),
                 ),
-              )
+              ),
+              const SizedBox(height: 15,),
+              const Text('Si no tienes un usuario: !registrate aquí!'),
             ],
           ),
         ),
