@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:notes_app_riverpod/data/user_service.dart';
+import 'package:notes_app_riverpod/data/services/user_service.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -76,12 +76,11 @@ class LoginScreen extends StatelessWidget {
 
                     //Obtener información de la lista de usuarios:
                     final savedUserList = await UserService.getUsersList();
-
+            
                     //Comparar lo que ha escrito con lo que tenemos guardado:
                     if (savedUserList.any((user) =>
                         user.name == name && user.password == password)) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Inicio de sesión exitoso')));
+                      
                       context.push('/home-screen');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -105,13 +104,21 @@ class LoginScreen extends StatelessWidget {
                   onTap: () {
                     context.go('/register');
                   },
-                  child:
-                      Column(
-                        children: [
-                          Text('Si no tienes un usuario:', style: context.textTheme.titleSmall, textAlign: TextAlign.center,),
-                          Text('!registrate aquí!', style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
-                        ],
-                      )),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Si no tienes un usuario:',
+                        style: context.textTheme.titleSmall,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        '¡registrate aquí!',
+                        style: context.textTheme.titleSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),

@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/screens/edit_note_screen.dart';
 import 'package:notes_app_riverpod/screens/screens.dart';
 
-//todo: redireccionar según el usuario ya esté registrado o no
+
 
 final appRouter = GoRouter(
   initialLocation: '/register',

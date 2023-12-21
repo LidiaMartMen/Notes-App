@@ -18,7 +18,7 @@ class VerticalListNotes extends ConsumerWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
       child: SizedBox(
-        height: 500,
+        height: 450,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

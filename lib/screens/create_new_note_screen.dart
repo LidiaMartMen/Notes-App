@@ -228,7 +228,7 @@ class BuildNoteForm extends ConsumerWidget {
                           categories: categories);
 
                       //NAVEGACIÓN A LA PANTALLA PRINCIPAL
-                      context.push('/');
+                      context.push('/home-screen');
                     }
                   },
                   child: Text('GUARDAR NOTA',

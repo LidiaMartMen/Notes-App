@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "170171436433",
+    "project_id": "notesapp-865df",
+    "storage_bucket": "notesapp-865df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170171436433:android:c78421cee8073204d05e30",
+        "android_client_info": {
+          "package_name": "com.avvale.noteapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQCHYq1Z8MW_Niv0hA6qPU9nqewbQdnrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

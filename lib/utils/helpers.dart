@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app_riverpod/data/entities/categories.dart';
 import 'package:notes_app_riverpod/providers/notes_provider.dart';
+import 'package:notes_app_riverpod/data/services/notifications_service.dart';
 
 class Helpers {
   //FUNCIÓN CALENDARIO: DATE
   static Future<void> selectDate(BuildContext context, WidgetRef ref) async {
- 
     final DateTime initialDate = ref
         .watch(dateProvider.notifier)
         .state; //OBTENER VALOR GUARDADO EN PROVIDER
-
- 
 
     DateTime? selectedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2021),
         lastDate: DateTime(2090));
-
-    
 
 //DECIRLE AL PROVIDER QUE VALOR SE HA SELECCIONADO:
     if (selectedDate != null && selectedDate != initialDate) {
@@ -39,9 +37,6 @@ class Helpers {
       );
     }
   }
-
-
-
 }
 
 //FUNCIÓN PARA BORRAR LOS TEXTOS DEL FORMULARIO:
@@ -55,5 +50,6 @@ void clearForm({
   titleController.text = '';
   descriptionController.text = '';
   dateController.text = '';
-  selectedCategory= null;
-  }
+  selectedCategory = null;
+}
+

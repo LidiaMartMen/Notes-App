@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notes_app_riverpod/data/entities/entities.dart';
-import 'package:notes_app_riverpod/data/user_service.dart';
+import 'package:notes_app_riverpod/data/services/user_service.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -81,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                     //Comprobar si hay un usuario ya registrado con ese nombre:
                     if (savedUserList.any((user) => user.name == name)) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Nombre de usuario ya existe')));
+                          content: Text('Nombre de usuario ya existe, elige otro usuario o inicia sesión')));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Usuario registrado correctamente')));
@@ -114,7 +114,7 @@ class RegisterScreen extends StatelessWidget {
                       Column(
                         children: [
                           Text('Si ya tienes un usuario:', style: context.textTheme.titleSmall, textAlign: TextAlign.center,),
-                          Text('!Inicia sesión!', style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
+                          Text('¡Inicia sesión!', style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold), textAlign: TextAlign.center, ),
                         ],
                       )),
             ],

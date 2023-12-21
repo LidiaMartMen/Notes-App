@@ -23,7 +23,7 @@ class NotesCard extends ConsumerWidget {
       children: [
         Container(
           width: deviceSize.width,
-          height: deviceSize.height * 0.5,
+          height: deviceSize.height * 0.45,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: colors.primaryContainer),
