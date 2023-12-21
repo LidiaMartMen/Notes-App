@@ -1,37 +1,47 @@
 import 'dart:convert';
 
+import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
-  static const String _userKey = 'user';
+  static const String _userListKey = 'user_list';
 
   ///*FUNCIÓN GUARDAR DATOS CON SHARED_PREFERENCES:
-  static Future<void> saveUserInfo(String name, String password) async {
+  static Future<void> saveUserList(List<User> userList) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    //Lo guardo con un JSON:
-    final userMap = {'name': name, 'password': password};
-    final userJson = jsonEncode(userMap);
+    //EL mapa lo paso a una lista:
+    final userListJson = userList.map((user) => user.toJson()).toList();
+    //La lista la transformo a JSON:
+    final userListJsonString = jsonEncode(userListJson);
 
     //Guardar en SharedPreferences:
-    prefs.setString(_userKey, userJson);
+    prefs.setString(_userListKey, userListJsonString);
   }
 
-  ///*FUNCIÓN OBTENER DATOS DESDE SHARED_PREFERENCES:
-  static Future<Map<String, String>?> getUserInfo() async {
+  ///*FUNCIÓN OBTENER LISTA USUARIOS DESDE SHARED_PREFERENCES:
+  static Future<List<User>> getUsersList() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    //Obtener el usuario del JSON:
-    final userJson = prefs.getString(_userKey);
+    //Obtener la lista de usuarios del JSON:
+    final userListJsonString = prefs.getString(_userListKey);
 
     //Comprobar si hay usuario:
-    if (userJson != null) {
+    if (userListJsonString != null) {
       //Entonces decodifico el JSON:
-      final userMap = jsonDecode(userJson);
+      final userListJson = jsonDecode(userListJsonString) as List<dynamic>;
       //Devuelve un mapa con los datos:
-      return userMap.cast<String, String>();
+      return userListJson.map((userMap) => User.fromJson(userMap)).toList();
     } else {
-      return null;
+      return [];
     }
+  }
+
+  ///*FUNCIÓN GUARDAR USUARIO EN SHARED_PREFERENCES:
+  static Future<void> addUser(User user) async {
+    final List<User> userList = await getUsersList();
+    //Añado al usuario:
+    userList.add(user);
+    //Guardo la lista:
+    await saveUserList(userList);
   }
 }

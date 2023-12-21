@@ -10,6 +10,8 @@ class LoginScreen extends StatelessWidget {
   //Inicializar los controladores de texto:
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  //Añade un formKey al Form:
+  final _formKey = GlobalKey<FormState>(); 
 
   LoginScreen({super.key});
 
@@ -21,6 +23,7 @@ class LoginScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,18 +69,16 @@ class LoginScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   //Validar el formulario:
-                  if (Form.of(context).validate()) {
+                  if (_formKey.currentState?.validate() ?? false) {
                         //Acceder al nombre y contraseña:
                     final name = nameController.text;
                     final password = passwordController.text;
 
-                    //Obtener información del usuario guardado:
-                    final savedUser = await UserService.getUserInfo();
+                    //Obtener información de la lista de usuarios:
+                    final savedUserList = await UserService.getUsersList();
 
                     //Comparar lo que ha escrito con lo que tenemos guardado:
-                    if (savedUser != null &&
-                        savedUser['username'] == name &&
-                        savedUser['password'] == password) {
+                    if (savedUserList.any((user) => user.name == name && user.password == password)) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Inicio de sesión exitoso')));
                       context.push('/home-screen');
@@ -87,7 +88,6 @@ class LoginScreen extends StatelessWidget {
                               'Nombre de usuario o contraseña incorrectos')));
                     }
                   }
-                
                 },
                 style:
                     ElevatedButton.styleFrom(backgroundColor: colors.primary),

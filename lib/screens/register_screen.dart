@@ -1,13 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_app_riverpod/data/entities/entities.dart';
 import 'package:notes_app_riverpod/data/user_service.dart';
 import 'package:notes_app_riverpod/utils/extensions.dart';
-
 
 class RegisterScreen extends StatelessWidget {
   //Inicializar los controladores de texto:
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  //Añade un formKey al Form:
+  final _formKey = GlobalKey<FormState>();
 
   RegisterScreen({super.key});
 
@@ -19,6 +23,7 @@ class RegisterScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -35,10 +40,11 @@ class RegisterScreen extends StatelessWidget {
                 decoration: InputDecoration(
                     labelText: 'Nombre de usuario',
                     hintStyle: context.textTheme.titleMedium),
-                validator: (name){
-                  if(name == null || name.isEmpty){
+                validator: (name) {
+                  if (name == null || name.isEmpty) {
                     return 'Ingrese su nombre de usuario';
-                  } return null;
+                  }
+                  return null;
                 },
               ),
               const SizedBox(
@@ -50,29 +56,44 @@ class RegisterScreen extends StatelessWidget {
                 decoration: InputDecoration(
                     labelText: 'Contraseña',
                     hintStyle: context.textTheme.titleSmall),
-                validator: (password){
-                  if(password == null || password.isEmpty){
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
                     return 'Ingrese su contraseña';
-                  } return null;
+                  }
+                  return null;
                 },
               ),
               const SizedBox(
                 height: 60,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   //Validar el formulario:
-                  if(Form.of(context).validate()){
-                     //Acceder al nombre y contraseña:
-                  final name = nameController.text;
-                  final password = passwordController.text;
+                  if (_formKey.currentState?.validate() ?? false) {
+                    //Acceder al nombre y contraseña:
+                    final name = nameController.text;
+                    final password = passwordController.text;
+                   
 
-                  //Guardar usuario en SharedPreferences:
-                  UserService.saveUserInfo(name, password);
+                    //Obtener lista de usuarios:
+                    final savedUserList = await UserService.getUsersList();
 
-                  context.push('/login');
+                    //Comprobar si hay un usuario ya registrado con ese nombre:
+                    if (savedUserList.any((user) => user.name == name)) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Nombre de usuario ya existe')));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Usuario registrado correctamente')));
+                          
+                      //Guardar usuario en SharedPreferences:
+                      final newUser = User(name, password);
+                      await UserService.addUser(newUser);
+                    }
+
+                    //Ir a la pantalla de inicio sesión:
+                    context.push('/login');
                   }
-                 
                 },
                 style:
                     ElevatedButton.styleFrom(backgroundColor: colors.primary),
